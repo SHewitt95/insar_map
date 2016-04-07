@@ -48,6 +48,7 @@ map.once("load", function load() {
 
         geodata = JSON.parse(response); // put response geojson string into a js object
         //tileIndex = geojsonvt(data);
+        console.log(geodata);
 
         // example loop to show how we can change the geodata JSON object at runtime with code
         for (var i = 0; i < geodata.features.length; i++) {
