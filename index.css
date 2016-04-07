@@ -42,10 +42,15 @@ body {
 }
 
 .side-item.graph {
-  
+
     height: 250px;
     background-color: black;
     margin-bottom: 20px;
+}
+
+#chart {
+  width: 100%;
+  height: 100%;
 }
 
 .move-button {
@@ -68,9 +73,9 @@ body {
 
 h1{
     font-family: 'Carter One', cursive;
-    font-size: 40px;
+    font-size: 32px;
     color: coral;
-    
+
 }
 
 h2{
@@ -81,7 +86,7 @@ h2{
 
 label{
  color: coral;
-  font-family: 'Carter One', cursive;  
+  font-family: 'Carter One', cursive;
 }
 
 #input{
@@ -90,16 +95,16 @@ label{
 }
 
 /*.accordion,
-.accordion dt, 
+.accordion dt,
 .accordion dd,
 .accordion figure{
- 
+
     margin:0;
     padding:0;
 }*/
 
 .accordion{
-    
+
     background: DeepSkyBlue;
     border-bottom: 1px solid DodgerBlue;
     border-radius: 7px 7px 0 0;
@@ -110,7 +115,7 @@ label{
 }
 
 .accordion dd{
-    
+
     border:1px solid DeepSkyBlue;
     border-top: none;
     border-radius: 0 0 7px 7px;
@@ -133,7 +138,7 @@ button.accordion {
 }
 
 button.accordion.active, button.accordion:hover {
-    background-color: orange; 
+    background-color: orange;
     color:black;
 }
 
@@ -145,7 +150,7 @@ div.panel {
 }
 
 div.panel.show {
-    
+
     border: 1px solid orange;
     display: block !important;
     color:white;
@@ -156,11 +161,11 @@ button{
 }
 
 p.ul{
-    color:black;   
+    color:black;
 }
 
 div.menu{
- 
+
     margin-top: 5em;
-    
+
 }
