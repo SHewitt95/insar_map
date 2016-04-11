@@ -17,8 +17,10 @@ function Map(loadJSONFunc, clustered) {
     this.geoJSONSource = null;
     this.geodata = null;
     this.geoDataMap = {};
+    this.clustered = clustered;
 
     var that = this;
+    
     this.addMapToPage = function(containerID) {
         that.map = new mapboxgl.Map({
             container: containerID, // container id
@@ -30,6 +32,7 @@ function Map(loadJSONFunc, clustered) {
         that.map.addControl(new mapboxgl.Navigation());
         // what to do after the map loads
         that.map.once("load", function load() {
+        	console.log(that.clustered);
             // load in our sample json
             loadJSONFunc(function(response) {
                 // that function is called once the AJAX loads the geojson
@@ -285,5 +288,5 @@ function loadJSON(callback) {
 
 
 // TODO: the above function can be made much more granular with more else if's
-var myMap = new Map(loadJSON, false);
+var myMap = new Map(loadJSON, 12);
 myMap.addMapToPage("map-container");
