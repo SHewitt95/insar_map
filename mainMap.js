@@ -36,12 +36,14 @@ function Map(loadJSONFunc, clustered) {
 
                 geodata = JSON.parse(response); // put response geojson string into a js object
                 //tileIndex = geojsonvt(data);
+                //console.log(geodata.features);
 
                 // example loop to show how we can change the geodata JSON object at runtime with code
                 for (var i = 0; i < geodata.features.length; i++) {
                     // set title
                     geodata.features[i].properties.title = "\"" + i + "\"";
                     geodata.features[i].properties["marker-color"] = "#09A5FF";
+                    geodata.features[i].properties.myData = randomArray();
                     if (i % 3 == 0) {
                         geodata.features[i].properties["marker-symbol"] = "greenMarker";
                     } else if (i % 3 == 1) {
@@ -52,6 +54,8 @@ function Map(loadJSONFunc, clustered) {
 
                     that.geoDataMap[geodata.features[i].properties.title] = geodata.features[i];
                 }
+
+                console.log(geodata.features);
 
                 // a fast webgl (I think) geoJSON layer which will hopefully allow us to add millions of points
                 // with little performance hit
@@ -140,11 +144,14 @@ function Map(loadJSONFunc, clustered) {
         // When a click event occurs near a marker icon, open a popup at the location of
         // the feature, with description HTML from its properties.
         that.map.on('click', function(e) {
+          //console.log("this is e", e);
+          //console.log("this is e.point", e.point);
             that.map.featuresAt(e.point, {
                 radius: 7.5, // Half the marker size (15px).
                 includeGeometry: true,
                 layer: 'markers'
             }, function(err, features) {
+              //console.log("this is features",features);
                 if (err || !features.length) {
                     popup.remove();
                     return;
@@ -198,7 +205,9 @@ function Map(loadJSONFunc, clustered) {
                         pointStrokeColor: "#fff",
                         pointHighlightFill: "#fff",
                         pointHighlightStroke: "rgba(151,187,205,1)",
-                        data: [28, 48, 40, 19, 86, 27, 90]
+                        //data: [28, 48, 40, 19, 86, 27, 90]
+                        //data: randomArray()
+                        data: features[0].properties.myData
                     }]
                 };
 
@@ -268,6 +277,19 @@ function Map(loadJSONFunc, clustered) {
         // TODO: the above function can be made much more granular with more else if's
     }
 }
+
+// Test function that generates an array of random numbers. Simulates each point on map having their own data.
+function randomArray() {
+  var myArray = [];
+
+  for (var i = 0; i < 7; i++) {
+    myArray.push(Math.floor(Math.random() * (50 - 1 + 1)) + 1);
+  }
+
+  return myArray;
+}
+
+
 // function to use AJAX to load json from that same website - I looked online and AJAX is basically just used
 // to asynchronously load data using javascript from a server, in our case, our local website
 function loadJSON(callback) {
