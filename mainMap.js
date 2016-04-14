@@ -16,11 +16,12 @@ function Map(loadJSONFunc, clustered) {
     this.map = null;
     this.geoJSONSource = null;
     this.geodata = null;
+    this.drawer = null;
     this.geoDataMap = {};
     this.clustered = clustered;
 
     var that = this;
-    
+
     this.addMapToPage = function(containerID) {
         that.map = new mapboxgl.Map({
             container: containerID, // container id
@@ -29,10 +30,16 @@ function Map(loadJSONFunc, clustered) {
             zoom: 9 // starting zoom
         });
 
+        that.map.once("draw.deleted", e => {
+                console.log("hi");
+        });
+
         that.map.addControl(new mapboxgl.Navigation());
         // what to do after the map loads
         that.map.once("load", function load() {
-        	console.log(that.clustered);
+            // drawer to draw a square and select points
+            that.drawer = mapboxgl.Draw();
+            that.map.addControl(that.drawer);
             // load in our sample json
             loadJSONFunc(function(response) {
                 // that function is called once the AJAX loads the geojson
@@ -141,6 +148,8 @@ function Map(loadJSONFunc, clustered) {
                 }
             });
         });
+
+
 
         var popup = new mapboxgl.Popup();
 
@@ -255,7 +264,7 @@ function Map(loadJSONFunc, clustered) {
                     "layout": {
                         "icon-image": "{marker-symbol}",
                         "icon-allow-overlap": true,
-                        "icon-size": 0.42 // notice the new, smaller size at higher zoom levels
+                        "icon-size": 0.4 // notice the new, smaller size at higher zoom levels
                     }
                 });
             } else {
@@ -272,7 +281,7 @@ function Map(loadJSONFunc, clustered) {
                     "layout": {
                         "icon-image": "{marker-symbol}",
                         "icon-allow-overlap": true,
-                        "icon-size": 0.84 // notice the bigger size at smaller zoom levels.
+                        "icon-size": 0.3 // notice the bigger size at smaller zoom levels.
                     }
                 });
             }
@@ -310,5 +319,5 @@ function loadJSON(callback) {
 
 
 // TODO: the above function can be made much more granular with more else if's
-var myMap = new Map(loadJSON, 12);
+var myMap = new Map(loadJSON, false);
 myMap.addMapToPage("map-container");
