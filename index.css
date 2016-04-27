@@ -1,5 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Carter+One);
-
 html,
 body {
     margin: 0;
@@ -9,90 +8,91 @@ body {
 }
 
 .page-container {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .side-bar {
-  float: left;
-  height: 100%;
-  width: 33%;
-  background-color: rgb(4,53,101);
-  z-index: 10;
+    float: left;
+    height: 100%;
+    width: 33%;
+    background-color: rgb(4, 53, 101);
+    z-index: 10;
 }
 
 .side-item-box {
-  display: block;
-  width: 90%;
-  margin: 1em auto;
+    display: block;
+    width: 90%;
+    margin: 1em auto;
 }
 
 .side-item {
-  display: block;
-  /*margin: 1em auto;*/
-  width: 100%;
-  height: 50px;
-  /*background-color: black;*/
+    display: block;
+    /*margin: 1em auto;*/
+    width: 100%;
+    height: 50px;
+    /*background-color: black;*/
 }
 
-.side-item.title, .side-item.upload-button, .side-item.description {
-  /*background-color: white;*/
+.side-item.title,
+.side-item.upload-button,
+.side-item.description {
+    /*background-color: white;*/
 }
 
 .side-item.graph {
-
     height: 250px;
     background-color: black;
     margin-bottom: 20px;
 }
 
 #chart {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .move-button {
-  width: 15%;
-  margin-left: 90%;
+    width: 15%;
+    margin-left: 90%;
 }
 
 #map-container {
-	width: 67%;
-	height: 100%;
-	/*position: absolute;*/
-  z-index: 0;
-  float: right;
+    width: 67%;
+    height: 100%;
+    /*position: absolute;*/
+    z-index: 0;
+    float: right;
 }
 
 #map {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
-h1{
+h1 {
     font-family: 'Carter One', cursive;
     font-size: 32px;
     color: coral;
-
 }
 
-h2{
+h2 {
     font-family: 'Carter One', cursive;
     margin-top: 20px;
     color: coral;
 }
 
-label{
- color: coral;
-  font-family: 'Carter One', cursive;
-}
-
-#input{
+label {
     color: coral;
     font-family: 'Carter One', cursive;
 }
+
+#input {
+    color: coral;
+    font-family: 'Carter One', cursive;
+}
+
 
 /*.accordion,
 .accordion dt,
@@ -103,20 +103,18 @@ label{
     padding:0;
 }*/
 
-.accordion{
-
+.accordion {
     background: DeepSkyBlue;
     border-bottom: 1px solid DodgerBlue;
     border-radius: 7px 7px 0 0;
-    color:white;
+    color: white;
     font-size: 1.5em;
     margin-top: 0.222em;
     padding: 0.5em 1em;
 }
 
-.accordion dd{
-
-    border:1px solid DeepSkyBlue;
+.accordion dd {
+    border: 1px solid DeepSkyBlue;
     border-top: none;
     border-radius: 0 0 7px 7px;
     paddig: 1em;
@@ -137,9 +135,10 @@ button.accordion {
     transition: 0.4s;
 }
 
-button.accordion.active, button.accordion:hover {
+button.accordion.active,
+button.accordion:hover {
     background-color: orange;
-    color:black;
+    color: black;
 }
 
 div.panel {
@@ -150,22 +149,26 @@ div.panel {
 }
 
 div.panel.show {
-
     border: 1px solid orange;
     display: block !important;
-    color:white;
+    color: white;
 }
 
-button{
+button {
     font-family: 'Carter One', cursive;
 }
 
-p.ul{
-    color:black;
+p.ul {
+    color: black;
 }
 
-div.menu{
-
+div.menu {
     margin-top: 5em;
+}
 
+#map-type-menu {
+    position: absolute;
+    background: #fff;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
 }

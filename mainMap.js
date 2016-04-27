@@ -21,12 +21,22 @@ function Map(loadJSONFunc) {
     this.drawer = null;
     this.geoDataMap = {};
     this.layers = [];
+    this.disableInteractivity = function() {
+        that.map.dragPan.disable();
+        that.map.scrollZoom.disable();
+        that.map.doubleClickZoom.disable();
+    };
+
+    this.enableInteractivity = function() {
+        that.map.dragPan.enable();
+        that.map.scrollZoom.enable();
+        that.map.doubleClickZoom.enable();
+    };
+
     this.JSONCallback = function(response) {
         // that function is called once the AJAX loads the geojson
 
         geodata = JSON.parse(response); // put response geojson string into a js object
-        //tileIndex = geojsonvt(data);
-        //console.log(geodata.features);
 
         // example loop to show how we can change the geodata JSON object at runtime with code
         for (var i = 0, len = geodata.features.length; i < len; i++) {
@@ -54,12 +64,6 @@ function Map(loadJSONFunc) {
             clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
         });
 
-        // IGNORE add in our markers
-        /*map.addSource("markers", {
-            "type": "geojson",
-            "data": geodata
-        });*/
-
         var id = "markers" + currentPoint;
 
         that.layers.push(id); // keep track of our layers
@@ -81,6 +85,8 @@ function Map(loadJSONFunc) {
 
         if (currentPoint <= 20) {
             loadJSONFunc(fileToLoad, that.JSONCallback);
+        } else {
+            that.enableInteractivity();
         }
     }
 
@@ -89,122 +95,69 @@ function Map(loadJSONFunc) {
     this.addMapToPage = function(containerID) {
         that.map = new mapboxgl.Map({
             container: containerID, // container id
-            style: 'style.json', //stylesheet location
+            style: 'basicStyle.json', //stylesheet location
             center: [130.89, 31.89], // starting position
             zoom: 9 // starting zoom
-        });
-
-        that.map.once("draw.deleted", e => {
-            console.log("hi");
         });
 
         that.map.addControl(new mapboxgl.Navigation());
         // what to do after the map loads
         that.map.once("load", function load() {
             // drawer to draw a square and select points
-            that.drawer = mapboxgl.Draw();
-            that.map.addControl(that.drawer);
-
             var fileToLoad = filename + currentPoint + ".json";
             // load in our sample json
+            that.disableInteractivity();
             loadJSONFunc(fileToLoad, that.JSONCallback);
         });
-
-
-
-        var popup = new mapboxgl.Popup();
 
         // When a click event occurs near a marker icon, open a popup at the location of
         // the feature, with description HTML from its properties.
         that.map.on('click', function(e) {
-            for (var i = 0; i < that.layers.length; i++) {
-                that.map.featuresAt(e.point, {
-                    radius: 7.5, // Half the marker size (15px).
-                    includeGeometry: true,
-                    layer: that.layers[i]
-                }, function(err, features) {
-                    //console.log("this is features",features);
-                    if (err || !features.length) {
-                        popup.remove();
-                        return;
-                    }
-
-                    var feature = features[0];
-                    var title = feature.properties.title;
-
-                    // the features array seems to have a copy of the actual features, and not the real original
-                    // features that were added. Thus, I use the title of the feature as a key to lookup the
-                    // pointer to the actual feature we added, so changes made to it can be seen on the map.
-                    // that is just a test, so whenever a marker is clicked, the marker symbol is changed to a
-                    // different one before showing it's information in a popup.
-                    var actualFeature = that.geoDataMap[title];
-
-                    //actualFeature.properties["marker-symbol"] = "yellowMarker";
-                    actualFeature.properties["marker-color"] = "#ff8888";
-
-                    geoJSONSource.setData(geodata);
-
-                    // Populate the popup and set its coordinates
-                    // based on the feature found.
-                    /*  popup.setLngLat(feature.geometry.coordinates)
-                          .setHTML("lat " + feature.geometry.coordinates[1] + ", long " + feature.geometry.coordinates[0])
-                          .addTo(map);*/
-                    /*popup.setLngLat(feature.geometry.coordinates)
-                        .setHTML("<div id='chartDiv'><canvas id='chart'></canvas></div>")
-                        .addTo(map);*/
-
-                    /*var pieData = [{
-                        value: 20,
-                        color: "#878BB6"
-                    }, {
-                        value: 40,
-                        color: "#4ACAB4"
-                    }, {
-                        value: 10,
-                        color: "#FF8153"
-                    }, {
-                        value: 30,
-                        color: "#FFEA88"
-                    }];*/
-
-                    var lineData = {
-                        labels: ["January", "February", "March", "April", "May", "June", "July"],
-                        datasets: [{
-                            label: "My Second dataset",
-                            fillColor: "rgba(151,187,205,0.2)",
-                            strokeColor: "rgba(151,187,205,1)",
-                            pointColor: "rgba(151,187,205,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(151,187,205,1)",
-                            //data: [28, 48, 40, 19, 86, 27, 90]
-                            //data: randomArray()
-                            data: features[0].properties.myData
-                        }]
-                    };
-
-                    var options = {};
-
-                    var ctx = document.getElementById("chart").getContext("2d");
-                    var lineChart = new Chart(ctx).Line(lineData, options);
-                    //var myNewChart = new Chart(ctx).Pie(pieData);
-                });
+            var features = that.map.queryRenderedFeatures(e.point, {
+                layers: that.layers
+            });
+            that.map.interactive = false;
+            //console.log("this is features",features);
+            if (!features.length) {
+                console.log("errreturning");
+                return;
             }
+
+            var feature = features[0];
+            var title = feature.properties.title;
+            // the features array seems to have a copy of the actual features, and not the real original
+            // features that were added. Thus, I use the title of the feature as a key to lookup the
+            // pointer to the actual feature we added, so changes made to it can be seen on the map.
+            // that is just a test, so whenever a marker is clicked, the marker symbol is changed to a
+            // different one before showing it's information in a popup.
+            var actualFeature = that.geoDataMap[title];
+
+            var lineData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [{
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: actualFeature.properties.myData
+                }]
+            };
+
+            var options = {};
+
+            var ctx = document.getElementById("chart").getContext("2d");
+            var lineChart = new Chart(ctx).Line(lineData, options);
+            //var myNewChart = new Chart(ctx).Pie(pieData);           
         });
 
         // Use the same approach as above to indicate that the symbols are clickable
         // by changing the cursor style to 'pointer'.
         that.map.on('mousemove', function(e) {
-            for (var i = 0; i < that.layers.length; i++) {
-                var layer = that.layers[i];
-
-                that.map.featuresAt(e.point, {
-                    radius: 7.5, // Half the marker size (15px).
-                    layer: layer
-                }, function(err, features) {
-                    that.map.getCanvas().style.cursor = (!err && features.length) ? 'pointer' : '';
-                });
-            }
+            var features = that.map.queryRenderedFeatures(e.point, { layers: that.layers });
+            that.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
         });
 
         // handle zoom changed. we want to change the icon-size in the layer for varying zooms.
@@ -262,7 +215,6 @@ function Map(loadJSONFunc) {
                 }
             }
         });
-        // TODO: the above function can be made much more granular with more else if's
     }
 }
 
@@ -294,7 +246,5 @@ function loadJSON(filename, callback) {
     xobj.send(null);
 }
 
-
-// TODO: the above function can be made much more granular with more else if's
 var myMap = new Map(loadJSON);
 myMap.addMapToPage("map-container");
