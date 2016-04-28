@@ -42,11 +42,19 @@ function Map(loadJSONFunc) {
         for (var i = 0, len = geodata.features.length; i < len; i++) {
             // set title
             geodata.features[i].properties.title = "\"" + i + "\"";
+
+            var displacementsForCurrentPoint = geodata.features[i].properties.displacement;
+            var displacement = 0;
+
+            for (var disp in displacementsForCurrentPoint) {
+                displacement += displacementsForCurrentPoint[disp];
+            }
+
             // set colors
             geodata.features[i].properties.myData = randomArray();
-            if (i < -0.15682001908620198) {
-                geodata.features[i].properties["marker-symbol"] = "greenMarker";
-            } else if (i < 0.05441098411877951) {
+            if (displacement < -0.15682001908620198) {
+                geodata.features[i].properties["marker-symbol"] = "redMarker";
+            } else if (displacement < 0.05441098411877951) {
                 geodata.features[i].properties["marker-symbol"] = "yellowMarker";
             } else {
                 geodata.features[i].properties["marker-symbol"] = "greenMarker";
