@@ -21,6 +21,8 @@ function Map(loadJSONFunc) {
     this.drawer = null;
     this.geoDataMap = {};
     this.layers = [];
+    this.drawer = null;
+
     this.disableInteractivity = function() {
         that.map.dragPan.disable();
         that.map.scrollZoom.disable();
@@ -91,7 +93,7 @@ function Map(loadJSONFunc) {
         currentPoint++;
         var fileToLoad = filename + currentPoint + ".json";
 
-        if (currentPoint <= 20) {
+        if (currentPoint <= 23) {
             loadJSONFunc(fileToLoad, that.JSONCallback);
         } else {
             that.enableInteractivity();
@@ -105,12 +107,14 @@ function Map(loadJSONFunc) {
             container: containerID, // container id
             style: 'basicStyle.json', //stylesheet location
             center: [130.89, 31.89], // starting position
-            zoom: 9 // starting zoom
+            zoom: 5 // starting zoom
         });
 
         that.map.addControl(new mapboxgl.Navigation());
         // what to do after the map loads
         that.map.once("load", function load() {
+            // that.drawer = mapboxgl.Draw();
+            // that.map.addControl(that.drawer);
             // drawer to draw a square and select points
             var fileToLoad = filename + currentPoint + ".json";
             // load in our sample json
@@ -127,7 +131,6 @@ function Map(loadJSONFunc) {
             that.map.interactive = false;
             //console.log("this is features",features);
             if (!features.length) {
-                console.log("errreturning");
                 return;
             }
 
@@ -200,6 +203,27 @@ function Map(loadJSONFunc) {
                         }
                     });
                 }
+            } else if (that.map.getZoom() > 12) {
+                // if there is a layer with that name, remove it before adding
+                for (var i = 0; i < that.layers.length; i++) {
+                    var id = that.layers[i];
+
+                    if (that.map.getLayer(id)) {
+                        that.map.removeLayer(id);
+                    }
+
+                    that.map.addLayer({
+                        "id": id,
+                        "interactive": true,
+                        "type": "symbol",
+                        "source": id,
+                        "layout": {
+                            "icon-image": "{marker-symbol}",
+                            "icon-allow-overlap": true,
+                            "icon-size": 0.25 // notice the bigger size at smaller zoom levels.
+                        }
+                    });
+                }
             } else {
                 // if there is a layer with that name, remove it before adding
                 for (var i = 0; i < that.layers.length; i++) {
@@ -223,6 +247,9 @@ function Map(loadJSONFunc) {
                 }
             }
         });
+        // that.map.on("draw.changed", function(e) {
+        //     console.log(e)
+        // });
     }
 }
 
