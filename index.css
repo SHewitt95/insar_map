@@ -20,6 +20,7 @@ body {
     width: 33%;
     background-color: rgb(4, 53, 101);
     z-index: 10;
+    overflow: auto;
 }
 
 .side-item-box {
@@ -71,9 +72,14 @@ body {
     height: 100%;
 }
 
+h1.title{
+ 
+    font-size: 32px;
+    margin-bottom: 2em;
+}
+
 h1 {
     font-family: 'Carter One', cursive;
-    font-size: 32px;
     color: coral;
 }
 
@@ -111,6 +117,7 @@ label {
     font-size: 1.5em;
     margin-top: 0.222em;
     padding: 0.5em 1em;
+    
 }
 
 .accordion dd {
@@ -163,12 +170,62 @@ p.ul {
 }
 
 div.menu {
-    margin-top: 5em;
+    margin-top:2em;
 }
 
 #map-type-menu {
-    position: absolute;
-    background: #fff;
+    
+    /*background: rgba(255,255,255,0.5);*/
     padding: 10px;
     font-family: 'Open Sans', sans-serif;
+    margin-top:4em;
+   
+    
+}
+
+.logos{
+ margin:2em;   
+}
+
+.logo2{
+ margin-left: 4em;   
+}
+
+label{
+    
+     color:white;
+}
+
+
+
+.funding{
+ 
+    color:white;
+    margin-left: 2em;
+}
+
+#map-type-menu input[type="radio"]:checked + label {
+    color: coral;
+}
+
+
+.overlay_toggle>*{
+ 
+    display: inline-block;
+    float: left;
+}
+
+.toggle-button { 
+    background-color: white; margin: 5px 0;       border-radius: 20px; border: 2px solid         #D0D0D0; height: 14px; cursor: pointer;       width: 50px; position: relative; display:     inline-block; user-select: none; -webkit-      user-select: none; -ms-user-select: none;       -moz-user-select: none; 
+    margin-left: 2em;
+    
+}
+
+.toggle-button button { 
+    cursor: pointer; outline: 0; display:block; position: absolute; left: 0; top: 0; border-radius: 100%; width: 20px; height: 20px; background-color: white; float: left; margin: -3px 0 0 -3px; border: 2px solid #D0D0D0; transition: left 0.3s; 
+}
+
+.toggle-button-selected { 
+    background-color: coral; border: 2px solid coral; }
+.toggle-button-selected button { left: 37px; top: 0; margin: 0; border: none; width: 20px; height: 22px; box-shadow: 0 0 0px rgba(0,0,0,0.1); 
 }
